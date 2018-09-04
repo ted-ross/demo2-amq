@@ -1,0 +1,2 @@
+./setup-gcp-ic-only
+oc apply -f server.gcp.yaml
