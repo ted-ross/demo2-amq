@@ -15,34 +15,23 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <parent>
-    <groupId>io.openshift</groupId>
-    <artifactId>booster-parent</artifactId>
-    <version>23</version>
-  </parent>
-
   <groupId>io.openshift.booster</groupId>
-  <artifactId>vertx-messaging-work-queue-parent</artifactId>
+  <artifactId>vertx-messaging-worker</artifactId>
   <version>1-SNAPSHOT</version>
-  <packaging>pom</packaging>
+  <packaging>jar</packaging>
 
-  <name>Eclipse Vert.x - Messaging - Work Queue Booster - Parent</name>
+  <name>Eclipse Vert.x - Messaging - Work Queue Booster - Worker</name>
 
   <properties>
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>
     <vertx.version>3.5.3</vertx.version>
-    <vertx-maven-plugin.version>1.0.17</vertx-maven-plugin.version>
+    <vertx.verticle>io.openshift.booster.messaging.Worker</vertx.verticle>
+    <vertx.health>/</vertx.health>
   </properties>
-
-  <modules>
-    <module>frontend</module>
-    <module>worker</module>
-    <module>integration-tests</module>
-  </modules>
 
   <dependencyManagement>
     <dependencies>
@@ -57,6 +46,10 @@
   </dependencyManagement>
 
   <dependencies>
+    <dependency>
+      <groupId>io.vertx</groupId>
+      <artifactId>vertx-proton</artifactId>
+    </dependency>
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-simple</artifactId>
@@ -75,4 +68,58 @@
       <artifactId>vertx-config</artifactId>
     </dependency>
   </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>io.reactiverse</groupId>
+        <artifactId>vertx-maven-plugin</artifactId>
+        <version>${vertx-maven-plugin.version}</version>
+        <executions>
+          <execution>
+            <id>vmp</id>
+            <goals>
+              <goal>initialize</goal>
+              <goal>package</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+
+  <profiles>
+    <profile>
+      <id>openshift</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>io.fabric8</groupId>
+            <artifactId>fabric8-maven-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>fmp</id>
+                <goals>
+                  <goal>resource</goal>
+                  <goal>build</goal>
+                </goals>
+              </execution>
+            </executions>
+            <configuration>
+              <enricher>
+                <excludes>
+                  <exclude>f8-maven-scm</exclude>
+                </excludes>
+              </enricher>
+              <config>
+                <vertx-health-check>
+                  <path>/</path>
+                </vertx-health-check>
+              </config>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
 </project>

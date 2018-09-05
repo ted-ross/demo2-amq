@@ -18,20 +18,31 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <parent>
-    <groupId>io.openshift.booster</groupId>
-    <artifactId>vertx-messaging-work-queue-parent</artifactId>
-    <version>1-SNAPSHOT</version>
-  </parent>
-
+  <groupId>io.openshift.booster</groupId>
   <artifactId>vertx-messaging-frontend</artifactId>
+  <version>1-SNAPSHOT</version>
   <packaging>jar</packaging>
 
   <name>Eclipse Vert.x - Messaging - Work Queue Booster - Frontend</name>
 
   <properties>
+    <maven.compiler.source>1.8</maven.compiler.source>
+    <maven.compiler.target>1.8</maven.compiler.target>
+    <vertx.version>3.5.3</vertx.version>
     <vertx.verticle>io.openshift.booster.messaging.Frontend</vertx.verticle>
   </properties>
+
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>io.vertx</groupId>
+        <artifactId>vertx-dependencies</artifactId>
+        <version>${vertx.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
 
   <dependencies>
     <dependency>
@@ -41,6 +52,23 @@
     <dependency>
       <groupId>io.vertx</groupId>
       <artifactId>vertx-proton</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-simple</artifactId>
+      <version>1.7.25</version>
+    </dependency>
+    <dependency>
+      <groupId>io.vertx</groupId>
+      <artifactId>vertx-core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.vertx</groupId>
+      <artifactId>vertx-rx-java2</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.vertx</groupId>
+      <artifactId>vertx-config</artifactId>
     </dependency>
   </dependencies>
 
