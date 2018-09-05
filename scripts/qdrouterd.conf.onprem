@@ -73,7 +73,7 @@ connector {
     sslProfile: TLS
     saslMechanisms: EXTERNAL
     verifyHostName: no
-    cost: 25
+    cost: 30
 }
 
 address {
